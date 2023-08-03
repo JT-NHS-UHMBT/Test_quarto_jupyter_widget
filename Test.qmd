@@ -1,0 +1,37 @@
+---
+title: "Test for jupyter widget not working in Quarto"
+author: "User name"
+toc: true
+number-sections: true
+format:
+  html:
+    code-fold: true
+    html-math-method: katex
+jupyter: python3
+---
+
+# Test using sample data
+Test
+
+```{python}
+import pandas as pd
+import seaborn as sns
+import ipywidgets as widgets
+
+# Read in data
+df_iris = sns.load_dataset('iris')
+
+# Get categories
+species = df_iris['species'].unique()
+
+# Create dropdown widget
+dropdown = widgets.Dropdown(options=species, description='Select category:')
+
+# Function to update summary stats based on dropdown widget selection
+def update_category(selected_cat):
+  filtered_df = df_iris[df_iris['species']==selected_cat]['sepal_length'].describe()
+  return display(filtered_df)
+
+# Register function as event handler for dropdown widget
+widgets.interactive(update_category, selected_cat=dropdown)
+```
